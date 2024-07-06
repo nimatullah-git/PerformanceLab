@@ -18,32 +18,37 @@ import java.util.Map;
 public class Task3 {
 
     public static void main(String[] args) {
-        String valuesPath = "values.json";
-        String testsPath = "tests.json";
-        String reportPath = "report.json";
+        if (args.length < 3) {
+            System.err.println("Please provide three arguments: values file, tests file, and report file.");
+            return;
+        }
+
+        String valuesFileName = args[0];
+        String testsFileName = args[1];
+        String reportFileName = args[2];
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
 
             // Read values.json
-            Map<Integer, String> valuesMap = readValues(objectMapper, valuesPath);
+            Map<Integer, String> valuesMap = readValues(objectMapper, valuesFileName);
 
             // Read and update tests.json
-            JsonNode testsNode = readTestsAndUpdateValues(objectMapper, testsPath, valuesMap);
+            JsonNode testsNode = readTestsAndUpdateValues(objectMapper, testsFileName, valuesMap);
 
             // Write the updated data to report.json
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(reportPath), testsNode);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(reportFileName), testsNode);
 
-            System.out.println("Report generated successfully: " + reportPath);
+            System.out.println("Report generated successfully: " + reportFileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static Map<Integer, String> readValues(ObjectMapper objectMapper, String valuesPath) throws IOException {
-        InputStream valuesStream = Task3.class.getClassLoader().getResourceAsStream(valuesPath);
+    private static Map<Integer, String> readValues(ObjectMapper objectMapper, String valuesFileName) throws IOException {
+        InputStream valuesStream = Task3.class.getClassLoader().getResourceAsStream(valuesFileName);
         if (valuesStream == null) {
-            throw new IllegalArgumentException("File not found: " + valuesPath);
+            throw new IllegalArgumentException("File not found: " + valuesFileName);
         }
         JsonNode valuesNode = objectMapper.readTree(valuesStream);
         Map<Integer, String> valuesMap = new HashMap<>();
@@ -55,10 +60,10 @@ public class Task3 {
         return valuesMap;
     }
 
-    private static JsonNode readTestsAndUpdateValues(ObjectMapper objectMapper, String testsPath, Map<Integer, String> valuesMap) throws IOException {
-        InputStream testsStream = Task3.class.getClassLoader().getResourceAsStream(testsPath);
+    private static JsonNode readTestsAndUpdateValues(ObjectMapper objectMapper, String testsFileName, Map<Integer, String> valuesMap) throws IOException {
+        InputStream testsStream = Task3.class.getClassLoader().getResourceAsStream(testsFileName);
         if (testsStream == null) {
-            throw new IllegalArgumentException("File not found: " + testsPath);
+            throw new IllegalArgumentException("File not found: " + testsFileName);
         }
         JsonNode testsNode = objectMapper.readTree(testsStream);
         updateValues(testsNode.get("tests"), valuesMap);

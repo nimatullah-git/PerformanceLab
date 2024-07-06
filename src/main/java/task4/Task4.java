@@ -14,7 +14,13 @@ import java.util.List;
  */
 public class Task4 {
     public static void main(String[] args) {
-        String inputFileName = "input_file.txt";
+        if (args.length < 1) {
+            System.err.println("Please provide the input file name.");
+            return;
+        }
+
+        String inputFileName = args[0];
+
         try {
             int[] nums = readArrayFromFile(inputFileName);
             int minMoves = minMovesToEqualElements(nums);
@@ -38,21 +44,20 @@ public class Task4 {
             throw new IOException("File not found: " + fileName);
         }
 
-        List<Integer> numList = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                numList.add(Integer.parseInt(line.trim()));
-            }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        List<Integer> numbers = new ArrayList<>();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            numbers.addAll(Arrays.asList(line.split("\\s+")).stream().map(Integer::parseInt).toList());
         }
 
-        return numList.stream().mapToInt(Integer::intValue).toArray();
+        return numbers.stream().mapToInt(i -> i).toArray();
     }
 
     /**
-     * Calculates the minimum number of moves required to make all elements in the array equal.
+     * Calculates the minimum number of moves to make all elements in the array equal.
      *
-     * @param nums The array of integers.
+     * @param nums An array of integers.
      * @return The minimum number of moves.
      */
     private static int minMovesToEqualElements(int[] nums) {

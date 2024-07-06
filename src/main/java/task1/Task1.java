@@ -1,7 +1,6 @@
 package task1;
 
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * A class that demonstrates array manipulation based on user input.
@@ -10,23 +9,23 @@ import java.util.Scanner;
  */
 public class Task1 {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        if (args.length < 2) {
+            System.out.println("Please provide the array size (n) and interval (m) as command-line arguments.");
+            return;
+        }
 
-        // Input data from user
-        int n = scanner.nextInt();  // Number of elements in the array
-        int m = scanner.nextInt();  // Interval length
+        int n = Integer.parseInt(args[0]); // Number of elements in the array
+        int m = Integer.parseInt(args[1]); // Interval length
 
         // Create and initialize array
         int[] array = new int[n];
-        Arrays.setAll(array, i -> i + 1);  // Fill array with values from 1 to n
+        Arrays.setAll(array, i -> i + 1); // Fill array with values from 1 to n
 
         // Print array elements based on the interval
         int current = 0;
         do {
-            System.out.print(array[current] + " ");  // Print current element
-            current = (current + m - 1) % n;  // Calculate next index
-        } while (current != 0);  // Until we return to the beginning
-
-        scanner.close();
+            System.out.print(array[current] + " "); // Print current element
+            current = (current + m - 1) % n; // Calculate next index
+        } while (current != 0); // Until we return to the beginning
     }
 }

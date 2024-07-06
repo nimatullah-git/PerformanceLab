@@ -13,11 +13,19 @@ import java.io.InputStreamReader;
  */
 public class Task2 {
     public static void main(String[] args) {
+        if (args.length < 2) {
+            System.err.println("Please provide two arguments: circle data file and points data file.");
+            return;
+        }
+
+        String circleFileName = args[0];
+        String pointsFileName = args[1];
+
         // Variables to store circle data
         double centerX = 0, centerY = 0, radius = 0;
 
         // Read circle data
-        try (BufferedReader circleReader = getResourceFileReader("circle_data.txt")) {
+        try (BufferedReader circleReader = getResourceFileReader(circleFileName)) {
             String[] centerCoords = circleReader.readLine().trim().split("\\s+");
             if (centerCoords.length != 2) {
                 throw new IOException("Invalid circle data format.");
@@ -31,7 +39,7 @@ public class Task2 {
         }
 
         // Read points data
-        try (BufferedReader pointsReader = getResourceFileReader("points.txt")) {
+        try (BufferedReader pointsReader = getResourceFileReader(pointsFileName)) {
             String line;
             while ((line = pointsReader.readLine()) != null) {
                 String[] coordinates = line.trim().split("\\s+");
